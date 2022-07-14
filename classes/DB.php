@@ -4,6 +4,8 @@ class DB
 {
     private static object|null $instance = null;
     private PDO $pdo;
+    private  $query, $results;
+    private bool $error = false;
 
     private function __construct()
     {
@@ -21,5 +23,20 @@ class DB
             self::$instance = new DB();
         }
         return self::$instance;
+    }
+
+    public function query($sql):object|array
+    {
+        $this->query= $this->pdo->prepare($sql);
+        if (!$this->query->execute()) {
+            $this->error = true;
+        }
+        $$this->results =$this->query->fetchAll(PDO::FETCH_OBJ);
+        return $this;
+    }
+
+    public function getError()
+    {
+        return $this->error;
     }
 }

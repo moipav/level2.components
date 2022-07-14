@@ -1,4 +1,13 @@
 <?php
 require_once 'classes/DB.php';
 
-DB::getInstanse();
+$posts = DB::getInstanse()->query('SELECT * FROM `posts`');
+if ($posts->error()) {
+    echo 'we have error';
+}else{
+    echo 'ok';
+}
+die();
+echo '<pre>';
+var_dump($posts);
+echo '</pre>';
