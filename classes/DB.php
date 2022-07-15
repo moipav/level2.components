@@ -11,7 +11,6 @@ class DB
     {
         try {
             $this->pdo = new \PDO('mysql:host=localhost:3307;dbname=marlin_oop', 'root', '');
-            echo 'ok';
         } catch (\PDOException $exception) {
             die($exception->getMessage());
         }
@@ -25,13 +24,13 @@ class DB
         return self::$instance;
     }
 
-    public function query($sql):object|array
+    public function query($sql)//:object|array
     {
         $this->query= $this->pdo->prepare($sql);
         if (!$this->query->execute()) {
             $this->error = true;
         }
-        $$this->results =$this->query->fetchAll(PDO::FETCH_OBJ);
+        $this->results =$this->query->fetchAll(PDO::FETCH_OBJ);
         return $this;
     }
 
