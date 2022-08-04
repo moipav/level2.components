@@ -43,6 +43,12 @@ class Validator
                                 $this->addError("{$item} уже существует");
                             }
                             break;
+                            ///можем добавлять любое правило для валидации
+                        case 'email':
+                            if(!filter_var($value, FILTER_VALIDATE_EMAIL)){
+                                $this->addError("{$item} не является email-ом");
+                            }
+                            break;
                     }
 
                 }//else $this->passed = true;
