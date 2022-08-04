@@ -7,7 +7,7 @@ class Token
         return Session::put(Config::get('session.token_name'), md5(uniqid()));
     }
 
-    public static function check($token)
+    public static function check($token):bool
     {
         $tokenName = Config::get('session.token_name');
 

@@ -2,10 +2,11 @@
 session_start();
 require_once 'classes/DB.php';
 require_once 'classes/Config.php';
-require_once 'classes/Input.php';
 require_once 'classes/Validator.php';
+require_once 'classes/Input.php';
 require_once 'classes/Token.php';
 require_once 'classes/Session.php';
+require_once 'classes/User.php';
 $GLOBALS['config'] = [
     'mysql' => [
         'host' => 'localhost:3307',
@@ -17,38 +18,46 @@ $GLOBALS['config'] = [
         ]
     ],
     'session' => [
-            'token_name' => 'token'
+        'token_name' => 'token'
     ]
 ];
-var_dump($_SESSION);
 
 if (Input::exists()) {
     if (Token::check(Input::get('token'))) {
-        $validate = new Validator();
+    $validate = new Validator();
 
-        $validate->check($_POST, [
-            'username' => [
-                'required' => true,
-                'min' => 2,
-                'max' => 15,
-                'unique' => 'users'
-            ],
-            'password' => [
-                'required' => true,
-                'min' => 3
-            ],
-            'password_again' => [
-                'required' => true,
-                'matches' => 'password'
-            ]
+    $validate->check($_POST, [
+        'username' => [
+            'required' => true,
+            'min' => 2,
+            'max' => 15,
+            'unique' => 'users'
+        ],
+        'password' => [
+            'required' => true,
+            'min' => 3
+        ],
+        'password_again' => [
+            'required' => true,
+            'matches' => 'password'
+        ]
+    ]);
+    if ($validate->passed()) {
+            echo "validate OK";
+        $user = new User;
+        $user->create([
+            'username' => Input::get('username'),
+            'password_hash' => password_hash(Input::get('password'), PASSWORD_DEFAULT)
         ]);
-        if ($validate->passed()) {
-            echo 'passed';
-        } else {
-            foreach ($validate->errors() as $error) {
-                echo $error . '<br>';
-            }
+
+
+        Session::flash('success', 'Все ок');
+        echo 'passed';
+    } else {
+        foreach ($validate->errors() as $error) {
+            echo $error . '<br>';
         }
+    }
     }
 }
 ?>
@@ -62,22 +71,23 @@ if (Input::exists()) {
         <title>Document</title>
     </head>
     <body>
+    <?= Session::flash('success'); ?>
     <form action="" method="post">
         <div class="field">
             <label for="username">Username</label>
-            <input type="text" name="username" value="<?= Input::get('username') ?>">
+            <input type="text" name="username" value="<?=Input::get('username');?>">
         </div>
         <div class="field">
             <label for="password">Password</label>
 
-                <input type="text" name="password">
+            <input type="text" name="password">
 
         </div>
         <div class="field">
             <label for="password_again">Password Again</label>
             <input type="text" name="password_again">
         </div>
-<input type="text" name="token" value="<?=Token::generate();?>">
+        <input type="text" name="token" value="<?=Token::generate(); ?>">
         <div class="field">
             <button type="submit">Submit</button>
         </div>
@@ -112,4 +122,4 @@ if (Input::exists()) {
 //}
 //echo '<hr>';
 //echo 'Количество записей:' . $users->getCount();
-var_dump(Token::check(Input::get('token')));
+//var_dump(Token::check(Input::get('token')));

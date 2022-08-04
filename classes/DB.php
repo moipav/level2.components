@@ -32,7 +32,7 @@ class DB
      * @param array $params
      * @return object|array
      */
-    public function query($sql, array $params = []): object|array
+    public function query(string $sql, array $params = []): object|array
     {
         $this->error = false;
         $this->query = $this->pdo->prepare($sql);

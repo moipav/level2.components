@@ -11,7 +11,7 @@ class Validator
         $this->db = DB::getInstanse();
     }
 
-    public function check($source, $items = []): void
+    public function check($source, $items = [])
     {
         foreach ($items as $item => $rules) {
             foreach ($rules as $rule => $rule_value) {
@@ -21,17 +21,17 @@ class Validator
                 if ($rule == 'required' && empty($value)) {
                     $this->addError("{$item} не заполнено");
                 } else if (!empty($value)) {
-                    switch ($rule){
+                    switch ($rule) {
                         case 'min':
                             if (strlen($value) < $rule_value) {
-                            $this->addError("{$item} поле должно быть не меньше {$rule_value} символов");
+                                $this->addError("{$item} поле должно быть не меньше {$rule_value} символов");
                             }
                             break;
                         case 'max':
-                                if (strlen($value) > $rule_value) {
-                                    $this->addError("{$item} не должен превышать {$rule_value} символов");
-                                }
-                                break;
+                            if (strlen($value) > $rule_value) {
+                                $this->addError("{$item} не должен превышать {$rule_value} символов");
+                            }
+                            break;
                         case 'matches':
                             if ($value != $source[$rule_value]) {
                                 $this->addError("{$rule_value} должен совпадать с {$item}");
@@ -39,27 +39,20 @@ class Validator
                             break;
                         case 'unique':
                             $check = $this->db->getForTable($rule_value, [(string)$item, '=', (string)$value]);
-                            if($check->getCount()){
-                                $this->addError("$item уже существует");
+                            if ($check->getCount()) {
+                                $this->addError("{$item} уже существует");
                             }
                             break;
                     }
-                    /*match ($rule) {
-                        'min' => if (strlen($value) < $rule_value) {
-                        $this->addError("{$item} поле должно быть не меньше {$rule_value} символов");
-                    }
-                    'max' => if (strlen($value) > $rule_value) {
-                        $this->addError("{$item} не должен превышать {$rule_value} символов");
-                    }
-                    'matches' => if ($value != $source[$rule_value]) {
-                        $this->addError("{$rule_value} должен совпадать с {$item}");
-                    }
-                    }
-                    };*/
-                }
+
+                }//else $this->passed = true;
             }
         }
+        if (empty($this->errors)){
+            $this->passed = true;
+        }
     }
+
     public function addError($error)
     {
         $this->errors[] = $error;
