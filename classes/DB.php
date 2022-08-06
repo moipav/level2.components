@@ -71,6 +71,12 @@ class DB
         return $this->count;
     }
 
+
+    /**
+     * @param string $table
+     * @param array $where(string name column, string action(<,>,=), $value)
+     * @return object|bool
+     */
     public function getForTable(string $table, array $where = []): object|bool
     {
         return $this->getForAction('SELECT *', $table, $where);

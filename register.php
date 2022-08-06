@@ -58,7 +58,7 @@ if (Input::exists()) {
 <?php var_dump($_SESSION)?>
 <?= Session::flash('success'); ?>
 
-<form action="/register.php" method="post">
+<form action="" method="post">
     <div class="field">
         <label for="username">Username</label>
         <input type="text" name="username" value="<?=Input::get('username');?>">
