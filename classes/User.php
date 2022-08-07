@@ -1,8 +1,10 @@
 <?php
-//14 урок заново и внимательно проверить
+
 class User
 {
     private $db;
+    private $data = null;
+    private $session_name;
 
     public function __construct()
     {
@@ -15,24 +17,39 @@ class User
     public function create($fields = [])
     {
         $this->db->insert('users', $fields);
-        var_dump($fields);
+        $this->session_name = Config::get('session.user_session');
+
     }
 
     public function login($email = null, $password = null)
     {
         if ($email) {
             //проверили усть-ли пользователь с таким емэйлом
-            //findOneUserByEmail()
-            $user = $this->db->getForTable('users', ['email', '=', $email])->first();
+
+            $user = $this->getEmail($email);
             //сравнили введеный пароль с БД
-//            var_dump($user);die;
-            if(password_verify($password, $user->password_hash)){
-                Session::put('user', $user->id);
-                return true;
+            if ($user) {
+                if (password_verify($password, $this->data->password_hash)) {
+                    Session::put($this->session_name, $this->data->id);
+                    return true;
+                }
             }
 
 
         }
         return false;
+    }
+
+    public function getEmail($email)
+    {
+        $this->data = $this->db->getForTable('users', ['email', '=', $email])->first();
+        if ($this->data) {
+            return true;
+        } else return false;
+    }
+
+    public function getData()
+    {
+        return $this->data;
     }
 }

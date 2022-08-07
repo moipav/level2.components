@@ -39,7 +39,7 @@ if (Input::exists()) {
         } else {
             foreach ($validate->errors() as $error) {
                 echo $error . "<br>";
-//                Redirect::to('index.php');
+
             }
         }
     }

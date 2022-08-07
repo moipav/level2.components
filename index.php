@@ -1,6 +1,6 @@
 <?php
 require_once 'init.php';
-var_dump($_SESSION);
+//var_dump(Config::get('session.user_session'));
 ?>
 
 <?php

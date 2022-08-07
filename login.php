@@ -1,6 +1,5 @@
 <?php
 require_once 'init.php';
-
 if (Input::exists()){
     if (Token::check(Input::get('token'))){
         $validate = new Validator();
@@ -43,7 +42,7 @@ if (Input::exists()){
     <div class="field">
 
         <label for="email">email</label>
-        <input type="text" name="email" value="<?=Input::get('email');?>">
+        <input type="email" name="email" value="<?=Input::get('email');?>">
     </div>
     <div class="field">
         <label for="password">Password</label>
