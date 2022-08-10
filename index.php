@@ -1,6 +1,17 @@
 <?php
 require_once 'init.php';
 //var_dump(Config::get('session.user_session'));
+$user = new User();
+$user2= new User(2);
+echo $user->getData()->username;
+//echo $user2->getData()->username;
+
+if ($user->getIsLogedIn()) {
+    echo "Hi, {$user->getData()->username}<br>";
+    echo "<a href='logout.php'> Logout</a>";
+}else{
+    echo "<a href='login.php'>Login</a> or <a href='register.php'> register</a>";
+}
 ?>
 
 <?php
