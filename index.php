@@ -1,5 +1,6 @@
 <?php
 require_once 'init.php';
+echo Session::flash('success');
 //var_dump(Config::get('session.user_session'));
 $user = new User();
 //$user2= new User(2);
@@ -10,6 +11,11 @@ if ($user->getIsLogedIn()) {
     echo "Hi, {$user->getData()->username}<br>";
     echo "<a href='logout.php'> Logout</a>";
     echo "<a href='update.php'> Update</a>";
+    echo "<a href='change_password.php'> Change password</a>";
+
+    if ($user->hasPermissions('admin')) {
+        echo "You are admin!";
+    }
 }else{
     echo "<a href='login.php'>Login</a> or <a href='register.php'> register</a>";
 }

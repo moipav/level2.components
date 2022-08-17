@@ -113,4 +113,20 @@ class User
         }
         $this->db->update('users', $id, $fields);
     }
+
+    public function hasPermissions($key)
+    {
+       $group = $this->db->getForTable('roles', ['id', '=', $this->getData()->role_id]);
+        if ($group->getCount()) {
+            $permissions = $group->first()->permissions;
+            $permissions = json_decode($permissions, true);
+//            if(key_exists($key, $permissions)){
+//                return true;
+//            }
+            if ($permissions[$key]){
+                return true;
+            }
+        }
+        return false;
+    }
 }
