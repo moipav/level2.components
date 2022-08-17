@@ -1,5 +1,6 @@
 <?php
 require_once 'init.php';
+var_dump($_POST);
 if (Input::exists()){
     if (Token::check(Input::get('token'))){
         $validate = new Validator();
@@ -11,7 +12,9 @@ if (Input::exists()){
 
         if($validate->passed()){
             $user = new User();
-            $login = $user->login(Input::get('email'), Input::get('password'));
+            $remember = (Input::get('remember')) === 'on' ? true : false;
+
+            $login = $user->login(Input::get('email'), Input::get('password'), $remember);
             if ($login) {
                 echo 'login successful';
             } else {
@@ -50,8 +53,11 @@ if (Input::exists()){
         <input type="text" name="password">
 
     </div>
-
-    <input type="text" name="token" value="<?=Token::generate(); ?>">
+    <div class="field">
+        <input type="checkbox" name="remember" id="remember">
+        <label for="remember">Remember me</label>
+    </div>
+    <input type="hidden" name="token" value="<?=Token::generate(); ?>">
     <div class="field">
         <button type="submit">Submit</button>
     </div>

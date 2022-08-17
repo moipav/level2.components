@@ -66,7 +66,7 @@ class DB
         return $this->results;
     }
 
-    function getCount(): int
+    function getCount()
     {
         return $this->count;
     }
